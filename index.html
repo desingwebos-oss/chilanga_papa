@@ -105,6 +105,13 @@ textarea{width:100%;margin-top:14px;border:1.5px solid var(--linea);border-radiu
 .send{margin-top:14px;width:100%;min-height:56px;border-radius:14px;background:var(--wa);color:#04210f;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;gap:10px;border:2px solid #000}
 .fine{font-size:13px;color:var(--gris);margin-top:10px;text-align:center}
 #lbImg{width:100%;max-height:62vh;object-fit:contain;background:#eee;border-radius:14px}
+.salsa-list{display:grid;gap:10px;margin-top:14px}
+.salsa-group{margin-top:14px}
+.salsa-group h4{font:700 12px var(--texto);text-transform:uppercase;letter-spacing:.8px;color:var(--gris);margin-bottom:8px;background:var(--bg);padding:6px 10px;border-radius:999px;display:inline-block}
+.salsa-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.8px solid var(--linea);border-radius:14px;background:var(--bg);font-weight:600;font-size:14px;cursor:pointer}
+.salsa-item.on{border-color:var(--ink);background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.salsa-item input{width:20px;height:20px;accent-color:var(--rojo)}
+.salsa-count{font-size:12px;color:#000;background:var(--oro);padding:6px 10px;border-radius:999px;margin-left:auto;font-weight:800}
 @media (min-width:820px){.arrows{display:flex}.card{width:300px}.foot{grid-template-columns:1.2fr 1fr 1fr}dialog{margin:auto}dialog{border-radius:22px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
@@ -150,7 +157,7 @@ textarea{width:100%;margin-top:14px;border:1.5px solid var(--linea);border-radiu
     </div>
     <div><h3>Zona de envío</h3><p>Vergel de Guadalupe, Evolución, Neza Centro, Reforma, Las Flores y alrededores. Fuera de zona con costo extra.</p></div>
   </div>
-  <div class="legal">© La Chilanga Papa · Puro sabor de barrio, el barrio vive · Pedidos fake serán bloqueados</div>
+  <div class="legal">© La Chilanga Papa · Puro sabor de barrio, el barrio vive · Neza-York</div>
 </div></footer>
 
 <div class="cartbar"><button id="barEmpty" class="empty" type="button">¡Arma tu pedido! 🍟</button><button id="barGo" class="go" type="button" hidden><span id="barTxt">Ver mi pedido</span><em id="barN">0</em></button></div>
@@ -174,10 +181,29 @@ textarea{width:100%;margin-top:14px;border:1.5px solid var(--linea);border-radiu
   <img id="lbImg" alt="">
   <div id="lbCtl" style="margin-top:12px"></div>
 </div></dialog>
+<dialog id="salsaModal"><div class="sheet">
+  <div class="sheet-h"><h3 id="salsaTitle">Elige salsa</h3><span class="salsa-count" id="salsaCounter">0 / 3</span><button class="x" type="button" data-close>✕</button></div>
+  <p class="nota">Selecciona salsa - hasta 3 opciones</p>
+  <div id="salsaList" class="salsa-list"></div>
+  <div class="alert" style="margin-top:14px">Puedes combinar hasta 3 salsas. Si es papas, elige tu sabor.</div>
+  <div style="display:flex;gap:10px;margin-top:16px"><button class="x" style="flex:1;background:var(--bg);min-height:50px;border-radius:14px;font-weight:700" type="button" data-close>Cancelar</button><button id="salsaConfirm" class="add" style="flex:1;min-height:50px">Agregar con salsas</button></div>
+</div></dialog>
 
 <script>
 const TEL="525581198600";
 const wa=t=>`https://wa.me/${TEL}?text=${encodeURIComponent(t)}`;
+
+const SALSAS_ALITAS = {
+  "CLÁSICAS $80-90": ["Maggi","Tajín","Valentina","BBQ y Limón"],
+  "SABORES $90": ["Mango Habanero","Tamarindo Chipotle","Buffalo Wings","Arándano Picoso","Lemon Pepper","Ranch"],
+  "EXÓTICAS $100": ["Honey Dragon","Ajo Parmesano","Cajún","Blue Cheese","Mezcal Chilimón","BBQ Whisky"]
+};
+const SALSAS_PAPAS = {
+  "PAPAS FRITAS - 10 SABORES": ["Saladas","Adobadas","Queso","Chipotle","Limón y Sal","Pepino Habanero","Habanero","Flamin' Hot","Crema con Especias","Queso Jalapeño"],
+  "PAPAS LOCAS": ["Maggi","Tajín","Chamoy","Valentina","Botanera","Búfalo","Limón"]
+};
+const SALSAS_TODAS = [...SALSAS_ALITAS["CLÁSICAS $80-90"], ...SALSAS_ALITAS["SABORES $90"], ...SALSAS_ALITAS["EXÓTICAS $100"]];
+
 const CATS=[
  {id:"paquetes",nombre:"Paquetes",nota:"Pa’ toda la banda",thumb:"paquetes",promos:[["07-combo-banda.jpg","Combo Banda"],["15-maxi-combo.jpg","Maxi-Combo boneless y alitas"],["13-paquetes-exoticos.jpg","Paquetes exóticos"]]},
  {id:"combos",nombre:"Combos",nota:"Cada quien lo suyo",thumb:"combos",promos:[["05-combo-korea-total.jpg","Combo Korean Total"],["01-combos-clasicos.jpg","Combos clásicos"],["11-combo-yin-yang.jpg","Combo Yin Yang coreanas"],["06-combos-duo.jpg","Combos Dúo"]]},
@@ -191,8 +217,41 @@ const IMG={};CATS.forEach(c=>c.promos.forEach(([f,n])=>IMG[n]=f));
 const cartQ=new Map();
 const $=id=>document.getElementById(id);
 const ARROW=d=>`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
-const ctl=n=>{const q=cartQ.get(n)||0;return q?`<div class="step"><button type="button" data-a="dec" data-n="${n}" aria-label="Quitar uno de ${n}">−</button><span>${q}</span><button type="button" data-a="inc" data-n="${n}" aria-label="Agregar otro ${n}">+</button></div>`:`<button class="add" type="button" data-a="inc" data-n="${n}">+ Agregar</button>`};
+let pendingPromo=null;
+const keyFor=(n,s)=>`${n}__${s}`;
+const parseKey=k=>{const i=k.lastIndexOf("__");return i>-1?{n:k.slice(0,i),s:k.slice(i+2)}:{n:k,s:"Sin salsa"};};
+const qtyFor=n=>{let t=0;for(const [k,v] of cartQ) if(k.startsWith(n+"__")) t+=v.q; return t;};
+const ctl=n=>{const q=qtyFor(n);return q?`<div class="step"><button type="button" data-a="dec" data-n="${n}" aria-label="Quitar uno de ${n}">−</button><span>${q}</span><button type="button" data-a="inc" data-n="${n}" aria-label="Agregar otro ${n}">+</button></div>`:`<button class="add" type="button" data-a="inc" data-n="${n}">+ Agregar</button>`};
 const folioId=()=>`NEZA-${Math.floor(1000+Math.random()*9000)}`;
+function buildSalsaListFor(prodName){
+  const lower=prodName.toLowerCase();
+  let html="";
+  if(lower.includes("papa") || lower.includes("nacho")){
+    for(const [grupo,lista] of Object.entries(SALSAS_PAPAS)){
+      html+=`<div class="salsa-group"><h4>${grupo}</h4>`+lista.map(s=>`<label class="salsa-item"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join("")+`</div>`;
+    }
+  } else {
+    for(const [grupo,lista] of Object.entries(SALSAS_ALITAS)){
+      html+=`<div class="salsa-group"><h4>${grupo}</h4>`+lista.map(s=>`<label class="salsa-item"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join("")+`</div>`;
+    }
+  }
+  return html;
+}
+function openSalsaModal(n){
+  pendingPromo=n;
+  $("salsaTitle").textContent=n;
+  $("salsaCounter").textContent="0 / 3";
+  $("salsaList").innerHTML=buildSalsaListFor(n);
+  $("salsaModal").showModal();
+  $("salsaList").querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('change',()=>{
+      const checked=[...$("salsaList").querySelectorAll('input:checked')];
+      if(checked.length>3){inp.checked=false;alert("Solo puedes elegir hasta 3 salsas, barrio");return;}
+      $("salsaCounter").textContent=`${checked.length} / 3`;
+      inp.closest('.salsa-item').classList.toggle('on',inp.checked);
+    });
+  });
+}
 let currentFolio=localStorage.getItem('folio')||folioId();
 localStorage.setItem('folio',currentFolio);
 
@@ -227,11 +286,40 @@ function sync(){
 
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-a]");
-  if(b){const n=b.dataset.n,q=(cartQ.get(n)||0)+(b.dataset.a==="inc"?1:-1);q>0?cartQ.set(n,q):cartQ.delete(n);sync();return}
+  if(b){
+    if(b.dataset.k){
+      const k=b.dataset.k; const cur=cartQ.get(k); const q=(cur?cur.q:0)+(b.dataset.a==="inc"?1:-1);
+      if(q>0) cartQ.set(k,{...cur,q}); else cartQ.delete(k);
+      sync(); return;
+    }
+    const n=b.dataset.n;
+    if(b.dataset.a==="inc"){openSalsaModal(n);return;}
+    const q=qtyFor(n)-1;
+    if(q<=0){
+      for(const k of [...cartQ.keys()]) if(k.startsWith(n+"__")) cartQ.delete(k);
+    } else {
+      const firstKey=[...cartQ.keys()].find(k=>k.startsWith(n+"__"));
+      if(firstKey){const cur=cartQ.get(firstKey); if(cur.q>1) cartQ.set(firstKey,{...cur,q:cur.q-1}); else cartQ.delete(firstKey);}
+    }
+    sync(); return;
+  }
   const z=e.target.closest("[data-zoom]");
   if(z){const n=z.dataset.zoom;$("lbName").textContent=n;$("lbImg").src=IMG[n];$("lbImg").alt="Promo "+n;$("lbCtl").innerHTML=ctl(n);$("lb").showModal();return}
   if(e.target.closest("[data-close]")||e.target.tagName==="DIALOG")e.target.closest("dialog").close();
   if(e.target.closest("#barGo")){$("cart").showModal();}
+});
+$("salsaConfirm").addEventListener("click",()=>{
+  if(!pendingPromo) return;
+  const checked=[...$("salsaList").querySelectorAll('input:checked')].map(i=>i.value);
+  if(checked.length===0){alert("Elige al menos 1 salsa, barrio");return;}
+  if(checked.length>3){alert("Solo hasta 3 salsas");return;}
+  const salsaStr=checked.join(", ");
+  const k=keyFor(pendingPromo,salsaStr);
+  const cur=cartQ.get(k);
+  cartQ.set(k,{n:pendingPromo,salsa:salsaStr,q:(cur?cur.q:0)+1});
+  $("salsaModal").close();
+  pendingPromo=null;
+  sync();
 });
 
 $("send").addEventListener("click",e=>{
