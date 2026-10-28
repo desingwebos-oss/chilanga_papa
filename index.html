@@ -114,7 +114,7 @@ textarea{width:100%;margin-top:14px;border:1.5px solid var(--linea);border-radiu
 .salsa-count{font-size:12px;color:#000;background:var(--oro);padding:6px 10px;border-radius:999px;margin-left:auto;font-weight:800}
 @media (min-width:820px){.arrows{display:flex}.card{width:300px}.foot{grid-template-columns:1.2fr 1fr 1fr}dialog{margin:auto}dialog{border-radius:22px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-.combo-list{display:grid;gap:10px;margin-top:14px;max-height:55vh;overflow:auto}.combo-item{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border:1.8px solid var(--linea);border-radius:14px;background:var(--bg);cursor:pointer;text-align:left;transition:all .2s}.combo-item.on{border-color:var(--ink);background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12);transform:scale(1.01)}.combo-item b{font-size:15px;line-height:1.2}.combo-item .precio{font-weight:800;color:var(--rojo);font-size:14px;margin-top:4px}</style>
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="wa" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35M12.05 21.78a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.89 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.48-8.41Z"/></symbol>
@@ -190,105 +190,19 @@ textarea{width:100%;margin-top:14px;border:1.5px solid var(--linea);border-radiu
 </div></dialog>
 
 <script>
+const TEL="525581198600";
+const wa=t=>`https://wa.me/${TEL}?text=${encodeURIComponent(t)}`;
+
 const SALSAS_ALITAS = {
   "CLÁSICAS $80-90": ["Maggi","Tajín","Valentina","BBQ y Limón"],
   "SABORES $90": ["Mango Habanero","Tamarindo Chipotle","Buffalo Wings","Arándano Picoso","Lemon Pepper","Ranch"],
   "EXÓTICAS $100": ["Honey Dragon","Ajo Parmesano","Cajún","Blue Cheese","Mezcal Chilimón","BBQ Whisky"]
 };
-
-const VARIANTES = {
-  "Combos clásicos": [
-    {id:"alitas6", nombre:"Combo Alitas 6pz + Papas + Refresco 600ml", precio:135},
-    {id:"boneless200", nombre:"Combo Boneless 200g + Papas + Refresco 600ml", precio:135},
-    {id:"chimichangas4", nombre:"Combo Chimichangas 4pz + Papas + Refresco", precio:115},
-    {id:"salchipulpos12", nombre:"Combo Salchipulpos 12pz + Papas + Refresco", precio:100},
-    {id:"band-kor-2", nombre:"Combo Banderillas Koreanas 2pz + Papas + Refresco", precio:125},
-    {id:"band-queso", nombre:"Combo Banderillas Queso + Papas + Refresco", precio:115},
-    {id:"band-salchicha-queso", nombre:"Combo Banderillas C/Salchicha + Papas + Refresco", precio:105},
-    {id:"hawaiana", nombre:"Combo Hawaiana + Papas + Refresco", precio:105},
-    {id:"salchicha", nombre:"Combo Salchicha + Papas + Refresco", precio:100}
-  ],
-  "Combos Dúo": [
-    {id:"duo-alitas", nombre:"Dúo Alitas 4pzs + Papas", precio:95},
-    {id:"duo-boneless", nombre:"Dúo Boneless 4pzs + Papas", precio:95},
-    {id:"duo-chimi", nombre:"Dúo Chimichangas 2pzs + Papas", precio:60},
-    {id:"duo-salchi", nombre:"Dúo Salchipulpos 6pzs + Papas", precio:60},
-    {id:"b-kor-1", nombre:"Banderilla Coreana 1pza + Papas", precio:65},
-    {id:"b-queso-1", nombre:"Banderilla Queso 1pza + Papas", precio:60},
-    {id:"b-haw-queso", nombre:"Hawaiana o Queso con Salchicha + Papas", precio:55},
-    {id:"b-sal-1", nombre:"Banderilla Salchicha + Papas", precio:50}
-  ],
-  "Combo Banda": [
-    {id:"banda", nombre:"Combo Banda - 6 Alitas + 8 Boneless + Papas Grandes + Refresco 1.75L", precio:250}
-  ],
-  "Maxi-Combo boneless y alitas": [
-    {id:"maxi", nombre:"Maxi-Combo - 12 Alitas + 18 Boneless + Papas Grandes + Refresco 1.75L", precio:425}
-  ],
-  "Paquetes exóticos": [
-    {id:"paq-alitas-exo", nombre:"Paquete Alitas Exóticas - 6pz + Papas + Refresco 600ml", precio:150, salsas:"exoticas"},
-    {id:"paq-boneless-exo", nombre:"Paquete Boneless Exóticas - 200g + Papas + Refresco 600ml", precio:150, salsas:"exoticas"}
-  ],
-  "Combo Korean Total": [
-    {id:"korea-total", nombre:"Combo Korea Total - 5 Banderillas Premium + 2 Papas Chicas + 2 Calpis 16oz", precio:300}
-  ],
-  "Combo Yin Yang coreanas": [
-    {id:"yin-yang", nombre:"Combo Yin Yang - 1 Banderilla Salada + 1 Dulce + Papas Chicas + Calpis 16oz", precio:150}
-  ],
-  "Banderillas coreanas": [
-    {id:"bk-papa", nombre:"Banderilla Coreana - Papa, Salchicha y Queso", precio:35},
-    {id:"bk-queso", nombre:"Banderilla Coreana - Puro Queso", precio:40},
-    {id:"bk-chetos", nombre:"Banderilla Coreana - Chetos Flamin Hot", precio:40},
-    {id:"bk-jala", nombre:"Banderilla Coreana - Queso Jalapeño", precio:40},
-    {id:"bk-cubitos", nombre:"Banderilla Coreana - Cubitos Papa", precio:40},
-    {id:"bk-ramen", nombre:"Banderilla Coreana - Ramen Crujiente", precio:40},
-    {id:"bk-guac", nombre:"Banderilla Coreana - Guacamole", precio:40}
-  ],
-  "Banderillas clásicas": [
-    {id:"bc-sal", nombre:"Banderilla Clásica - Salchicha", precio:30},
-    {id:"bc-haw", nombre:"Banderilla Clásica - Hawaiana", precio:35},
-    {id:"bc-queso", nombre:"Banderilla Clásica - Queso", precio:35},
-    {id:"bc-qs", nombre:"Banderilla Clásica - Queso con Salchicha", precio:35}
-  ],
-  "Banderillas dulces": [
-    {id:"bd-kinder", nombre:"Banderilla Dulce - Kinder Delice", precio:40},
-    {id:"bd-bubulubu", nombre:"Banderilla Dulce - Bubulubu", precio:40},
-    {id:"bd-mamut", nombre:"Banderilla Dulce - Mamut", precio:40}
-  ],
-  "Chimichangas, salchipulpos y bebidas": [
-    {id:"ch-pastor", nombre:"Chimichanga Pastor", precio:15},
-    {id:"ch-chori", nombre:"Chimichanga Choriqueso", precio:15},
-    {id:"ch-haw", nombre:"Chimichanga Hawaiana", precio:15},
-    {id:"ch-3q", nombre:"Chimichanga 3 Quesos", precio:15},
-    {id:"sal-6", nombre:"Salchipulpos 6 Pzs", precio:40},
-    {id:"ref-400", nombre:"Refresco 400ml", precio:20},
-    {id:"ref-600", nombre:"Refresco 600ml", precio:25},
-    {id:"ref-17", nombre:"Refresco 1.7Lt", precio:50},
-    {id:"ref-3", nombre:"Refresco 3Lt", precio:65},
-    {id:"calpis-16", nombre:"Calpis 16oz", precio:35}
-  ],
-  "Papas a la francesa y gajo": [
-    {id:"pf-francesa", nombre:"Papas a la Francesa", precio:40},
-    {id:"pf-gajo", nombre:"Papas Gajo", precio:60}
-  ],
-  "Papas fritas, papas locas y nachos": [
-    {id:"pf-bolsa", nombre:"Papas Fritas Bolsa - 10 Sabores", precio:30},
-    {id:"pl", nombre:"Papas Locas", precio:40},
-    {id:"nachos", nombre:"Nachos", precio:40}
-  ],
-  "Calpis": [
-    {id:"calpis", nombre:"Calpis 16oz 500ml", precio:35}
-  ],
-  "Alitas con actitud": [
-    {id:"alitas-cla", nombre:"Alitas Clásicas 6pzs $80", precio:80, salsas:"alitas-clasicas"},
-    {id:"alitas-sab", nombre:"Alitas Sabores 6pzs $90", precio:90, salsas:"alitas-sabores"},
-    {id:"alitas-exo", nombre:"Alitas Exóticas 6pzs $100", precio:100, salsas:"alitas-exoticas"}
-  ],
-  "Boneless con actitud": [
-    {id:"bone-cla", nombre:"Boneless Clásicas 200g $90", precio:90, salsas:"alitas-clasicas"},
-    {id:"bone-sab", nombre:"Boneless Sabores 200g $90", precio:90, salsas:"alitas-sabores"},
-    {id:"bone-exo", nombre:"Boneless Exóticas 200g $100", precio:100, salsas:"alitas-exoticas"}
-  ]
+const SALSAS_PAPAS = {
+  "PAPAS FRITAS - 10 SABORES": ["Saladas","Adobadas","Queso","Chipotle","Limón y Sal","Pepino Habanero","Habanero","Flamin' Hot","Crema con Especias","Queso Jalapeño"],
+  "PAPAS LOCAS": ["Maggi","Tajín","Chamoy","Valentina","Botanera","Búfalo","Limón"]
 };
+const SALSAS_TODAS = [...SALSAS_ALITAS["CLÁSICAS $80-90"], ...SALSAS_ALITAS["SABORES $90"], ...SALSAS_ALITAS["EXÓTICAS $100"]];
 
 const CATS=[
  {id:"paquetes",nombre:"Paquetes",nota:"Pa’ toda la banda",thumb:"paquetes",promos:[["07-combo-banda.jpg","Combo Banda"],["15-maxi-combo.jpg","Maxi-Combo boneless y alitas"],["13-paquetes-exoticos.jpg","Paquetes exóticos"]]},
@@ -304,62 +218,30 @@ const cartQ=new Map();
 const $=id=>document.getElementById(id);
 const ARROW=d=>`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
 let pendingPromo=null;
-let pendingVariant=null;
 const keyFor=(n,s)=>`${n}__${s}`;
-const qtyFor=n=>{let t=0;for(const v of cartQ.values()) if(v.base===n) t+=v.q; return t;};
-const ctl=n=>{const q=[...cartQ.values()].filter(v=>v.base===n).reduce((a,b)=>a+b.q,0);return q?`<div class="step"><button type="button" data-a="dec" data-n="${n}">−</button><span>${q}</span><button type="button" data-a="inc" data-n="${n}">+</button></div>`:`<button class="add" type="button" data-a="inc" data-n="${n}">+ Agregar</button>`};
+const parseKey=k=>{const i=k.lastIndexOf("__");return i>-1?{n:k.slice(0,i),s:k.slice(i+2)}:{n:k,s:"Sin salsa"};};
+const qtyFor=n=>{let t=0;for(const [k,v] of cartQ) if(k.startsWith(n+"__")) t+=v.q; return t;};
+const ctl=n=>{const q=qtyFor(n);return q?`<div class="step"><button type="button" data-a="dec" data-n="${n}" aria-label="Quitar uno de ${n}">−</button><span>${q}</span><button type="button" data-a="inc" data-n="${n}" aria-label="Agregar otro ${n}">+</button></div>`:`<button class="add" type="button" data-a="inc" data-n="${n}">+ Agregar</button>`};
 const folioId=()=>`NEZA-${Math.floor(1000+Math.random()*9000)}`;
-const wa=t=>`https://wa.me/525581198600?text=${encodeURIComponent(t)}`;
-
-function buildSalsaListFor(prodName, variant){
-  const tipo = variant?.salsas || "";
+function buildSalsaListFor(prodName){
+  const lower=prodName.toLowerCase();
   let html="";
-  if(tipo==="exoticas"){
-    html+=`<div class="salsa-group"><h4>SABORES EXÓTICOS $100</h4>`+["Honey Dragon","Ajo Parmesano","Cajún","Blue Cheese","Mezcal Chilimón","BBQ Whisky"].map(s=>`<label class="salsa-item"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join("")+`</div>`;
-  } else if(tipo==="alitas-clasicas"){
-    html+=`<div class="salsa-group"><h4>CLÁSICAS $80</h4>`+["Maggi","Tajín","Valentina","BBQ y Limón"].map(s=>`<label class="salsa-item"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join("")+`</div>`;
-  } else if(tipo==="alitas-sabores"){
-    html+=`<div class="salsa-group"><h4>SABORES $90</h4>`+["Mango Habanero","Tamarindo Chipotle","Buffalo Wings","Arándano Picoso","Lemon Pepper","Ranch"].map(s=>`<label class="salsa-item"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join("")+`</div>`;
-  } else if(tipo==="alitas-exoticas"){
-    html+=`<div class="salsa-group"><h4>EXÓTICAS $100</h4>`+["Honey Dragon","Ajo Parmesano","Cajún","Blue Cheese","Mezcal Chilimón","BBQ Whisky"].map(s=>`<label class="salsa-item"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join("")+`</div>`;
+  if(lower.includes("papa") || lower.includes("nacho")){
+    for(const [grupo,lista] of Object.entries(SALSAS_PAPAS)){
+      html+=`<div class="salsa-group"><h4>${grupo}</h4>`+lista.map(s=>`<label class="salsa-item"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join("")+`</div>`;
+    }
+  } else {
+    for(const [grupo,lista] of Object.entries(SALSAS_ALITAS)){
+      html+=`<div class="salsa-group"><h4>${grupo}</h4>`+lista.map(s=>`<label class="salsa-item"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join("")+`</div>`;
+    }
   }
   return html;
 }
-
-function openComboModal(promoName){
-  const variantes = VARIANTES[promoName] || [{id:"unico", nombre:promoName, precio:0}];
-  if(variantes.length===1){
-    const v = variantes[0];
-    if(v.salsas){
-      pendingPromo=promoName;
-      pendingVariant=v;
-      openSalsaModal(promoName, v);
-    } else {
-      const k=v.nombre+"__Sin salsa";
-      const cur=cartQ.get(k);
-      cartQ.set(k,{n:v.nombre,salsa:"",q:(cur?cur.q:0)+1, base:promoName, precio:v.precio});
-      sync();
-    }
-    return;
-  }
-  pendingPromo=promoName;
-  pendingVariant=null;
-  $("comboTitle").textContent=promoName;
-  $("comboList").innerHTML=variantes.map(v=>`<button class="combo-item" data-vid="${v.id}"><b>${v.nombre}</b>${v.precio?`<span class="precio">$${v.precio}</span>`:""}</button>`).join("");
-  $("comboModal").showModal();
-  $("comboList").querySelectorAll('.combo-item').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      $("comboList").querySelectorAll('.combo-item').forEach(b=>b.classList.remove('on'));
-      btn.classList.add('on');
-      pendingVariant = variantes.find(v=>v.id===btn.dataset.vid);
-    });
-  });
-}
-
-function openSalsaModal(promoName, variant){
-  $("salsaTitle").textContent= variant ? variant.nombre : promoName;
+function openSalsaModal(n){
+  pendingPromo=n;
+  $("salsaTitle").textContent=n;
   $("salsaCounter").textContent="0 / 3";
-  $("salsaList").innerHTML=buildSalsaListFor(variant ? variant.nombre : promoName, variant);
+  $("salsaList").innerHTML=buildSalsaListFor(n);
   $("salsaModal").showModal();
   $("salsaList").querySelectorAll('input').forEach(inp=>{
     inp.addEventListener('change',()=>{
@@ -370,7 +252,6 @@ function openSalsaModal(promoName, variant){
     });
   });
 }
-
 let currentFolio=localStorage.getItem('folio')||folioId();
 localStorage.setItem('folio',currentFolio);
 
@@ -387,14 +268,15 @@ document.querySelectorAll("[data-wa]").forEach(a=>a.href=wa("Hola, La Chilanga P
 $("folio").textContent=currentFolio;
 
 function sync(){
-  const tot=[...cartQ.values()].reduce((a,b)=>a+(b.q||0),0);
+  const tot=[...cartQ.values()].reduce((a,b)=>a+b,0);
   document.querySelectorAll(".ctl[data-n]").forEach(e=>e.innerHTML=ctl(e.dataset.n));
+  const lbn=$("lbName").textContent;if(lbn)$("lbCtl").innerHTML=ctl(lbn);
   $("barGo").hidden=!tot;$("barEmpty").hidden=!!tot;
-  $("barTxt").textContent=tot?`Ver mi pedido (${tot})`:"Ver mi pedido";$("barN").textContent=tot||"";
-  $("items").innerHTML=[...cartQ].map(([k,v])=>`<div class="item"><img src="${IMG[v.base]||"00-logo-oficial.jpg"}" alt=""><div style="flex:1"><b>${v.n}</b>${v.salsa?`<small style="display:block;color:var(--gris)">Salsas: ${v.salsa}</small>`:""}<span style="font-weight:700;color:var(--rojo)">${v.precio?`$${v.precio}`:""}</span></div><div class="ctl"><div class="step"><button type="button" data-a="dec" data-k="${k}">−</button><span>${v.q}</span><button type="button" data-a="inc" data-k="${k}">+</button></div></div></div>`).join("")||"<p>Tu pedido está vacío.</p>";
-  const lista=[...cartQ].map(([k,v])=>`• ${v.q} x ${v.n} ${v.precio?`$${v.precio}`:""}${v.salsa?` (Salsas: ${v.salsa})`:""}`).join("\n");
+  $("barTxt").textContent="Ver mi pedido";$("barN").textContent=tot;
+  $("items").innerHTML=[...cartQ].map(([n,q])=>`<div class="item"><img src="${IMG[n]}" alt=""><b>${n}</b><div class="ctl">${ctl(n)}</div></div>`).join("")||"<p>Tu pedido está vacío.</p>";
+  const lista=[...cartQ].map(([n,q])=>`• ${q} x ${n}`).join("\n");
   const nombre=$("cliNombre").value.trim();
-  const tel=$("cliTel").value.replace(/[^0-9]/g,'');
+  const tel=$("cliTel").value.replace(/\D/g,'');
   const dir=$("cliDir").value.trim();
   const nt=$("notas").value.trim();
   const texto=`Hola, La Chilanga Papa 👋\nFolio ${currentFolio}\nQuiero pedir a domicilio:\n${lista}${nombre?"\n\nNombre: "+nombre:""}${tel?"\nWhatsApp: "+tel:""}${dir?"\nDirección: "+dir:""}${nt?"\nNotas: "+nt:""}\n\nConfirmo que mi pedido es real y responderé cuando me contacten.`;
@@ -405,62 +287,39 @@ function sync(){
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-a]");
   if(b){
-    const k=b.dataset.k;
-    if(k){
-      const cur=cartQ.get(k);
-      const q=(cur?cur.q:0)+(b.dataset.a==="inc"?1:-1);
+    if(b.dataset.k){
+      const k=b.dataset.k; const cur=cartQ.get(k); const q=(cur?cur.q:0)+(b.dataset.a==="inc"?1:-1);
       if(q>0) cartQ.set(k,{...cur,q}); else cartQ.delete(k);
       sync(); return;
     }
     const n=b.dataset.n;
-    if(b.dataset.a==="inc"){openComboModal(n);return;}
-    const entries=[...cartQ.entries()].filter(([kk,v])=>v.base===n);
-    if(entries.length){
-      const [firstK,firstV]=entries[0];
-      if(firstV.q>1) cartQ.set(firstK,{...firstV,q:firstV.q-1}); else cartQ.delete(firstK);
+    if(b.dataset.a==="inc"){openSalsaModal(n);return;}
+    const q=qtyFor(n)-1;
+    if(q<=0){
+      for(const k of [...cartQ.keys()]) if(k.startsWith(n+"__")) cartQ.delete(k);
+    } else {
+      const firstKey=[...cartQ.keys()].find(k=>k.startsWith(n+"__"));
+      if(firstKey){const cur=cartQ.get(firstKey); if(cur.q>1) cartQ.set(firstKey,{...cur,q:cur.q-1}); else cartQ.delete(firstKey);}
     }
     sync(); return;
   }
   const z=e.target.closest("[data-zoom]");
-  if(z){
-    const n=z.dataset.zoom;
-    $("lbName").textContent=n;
-    $("lbImg").src=IMG[n];
-    $("lbImg").alt="Promo "+n;
-    $("lbCtl").innerHTML="";
-    $("lb").showModal();
-    return;
-  }
+  if(z){const n=z.dataset.zoom;$("lbName").textContent=n;$("lbImg").src=IMG[n];$("lbImg").alt="Promo "+n;$("lbCtl").innerHTML=ctl(n);$("lb").showModal();return}
   if(e.target.closest("[data-close]")||e.target.tagName==="DIALOG")e.target.closest("dialog").close();
   if(e.target.closest("#barGo")){$("cart").showModal();}
 });
-
-$("comboConfirm").addEventListener("click",()=>{
-  if(!pendingVariant){alert("Elige un combo/paquete de la lista");return;}
-  $("comboModal").close();
-  if(pendingVariant.salsas){
-    openSalsaModal(pendingPromo, pendingVariant);
-  } else {
-    const fullName=pendingVariant.nombre;
-    const k=fullName+"__Sin salsa";
-    const cur=cartQ.get(k);
-    cartQ.set(k,{n:fullName,salsa:"",q:(cur?cur.q:0)+1, base:pendingPromo, precio:pendingVariant.precio});
-    pendingPromo=null; pendingVariant=null; sync();
-  }
-});
-
 $("salsaConfirm").addEventListener("click",()=>{
-  if(!pendingPromo || !pendingVariant) return;
+  if(!pendingPromo) return;
   const checked=[...$("salsaList").querySelectorAll('input:checked')].map(i=>i.value);
-  if(checked.length===0){alert("Elige al menos 1 salsa exótica");return;}
+  if(checked.length===0){alert("Elige al menos 1 salsa, barrio");return;}
   if(checked.length>3){alert("Solo hasta 3 salsas");return;}
   const salsaStr=checked.join(", ");
-  const fullName=pendingVariant.nombre;
-  const k=keyFor(fullName,salsaStr);
+  const k=keyFor(pendingPromo,salsaStr);
   const cur=cartQ.get(k);
-  cartQ.set(k,{n:fullName,salsa:salsaStr,q:(cur?cur.q:0)+1, base:pendingPromo, precio:pendingVariant.precio});
+  cartQ.set(k,{n:pendingPromo,salsa:salsaStr,q:(cur?cur.q:0)+1});
   $("salsaModal").close();
-  pendingPromo=null; pendingVariant=null; sync();
+  pendingPromo=null;
+  sync();
 });
 
 $("send").addEventListener("click",e=>{
@@ -469,7 +328,7 @@ $("send").addEventListener("click",e=>{
   const last=localStorage.getItem('lastOrder');
   if(last && Date.now()-last < 180000){e.preventDefault();alert("Espera 3 minutos entre pedidos, barrio. Así evitamos pedidos falsos.");return;}
   const nombre=$("cliNombre").value.trim();
-  const tel=$("cliTel").value.replace(/[^0-9]/g,'');
+  const tel=$("cliTel").value.replace(/\D/g,'');
   const dir=$("cliDir").value.trim();
   const cap=$("captcha").value.trim().toUpperCase();
   if(!nombre || tel.length<10 || !dir){e.preventDefault();alert("Pon tu nombre, WhatsApp a 10 dígitos y dirección completa con referencias.");return;}
@@ -491,6 +350,6 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{
 }),{rootMargin:"-30% 0px -60% 0px"});
 document.querySelectorAll(".sec").forEach(s=>io.observe(s));
 sync();
-</script><dialog id="comboModal"><div class="sheet"><div class="sheet-h"><h3 id="comboTitle">Elige tu combo</h3><button class="x" type="button" data-close>✕</button></div><p class="nota">Este flyer trae varios productos - elige uno</p><div id="comboList" class="combo-list"></div><div style="display:flex;gap:10px;margin-top:16px"><button class="x" style="flex:1;background:var(--bg);min-height:50px;border-radius:14px;font-weight:700" type="button" data-close>Cancelar</button><button id="comboConfirm" class="add" style="flex:1;min-height:50px">Continuar</button></div></div></dialog>
+</script>
 </body>
 </html>
